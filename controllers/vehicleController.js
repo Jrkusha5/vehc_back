@@ -3,8 +3,8 @@ const Vehicle = require('../models/vehicleModel');
 // Add a new vehicle
 const addVehicle = async (req, res) => {
     try {
-        const { name, status } = req.body;
-        const newVehicle = new Vehicle({ name, status });
+        const { name, status, location, fuelLevel, batteryLevel } = req.body;
+        const newVehicle = new Vehicle({ name, status, location, fuelLevel, batteryLevel });
         await newVehicle.save();
         res.status(201).json(newVehicle);
     } catch (error) {
@@ -12,23 +12,29 @@ const addVehicle = async (req, res) => {
     }
 };
 
-// Update vehicle status
+// Update vehicle details
 const updateVehicle = async (req, res) => {
     try {
         const { id } = req.params;
-        const { status } = req.body;
+        const { status, location, fuelLevel, batteryLevel } = req.body;
+
         const updatedVehicle = await Vehicle.findByIdAndUpdate(
             id,
-            { status, lastUpdated: Date.now() },
-            { new: true }
+            { status, location, fuelLevel, batteryLevel, lastUpdated: Date.now() },
+            { new: true, runValidators: true }
         );
+
+        if (!updatedVehicle) {
+            return res.status(404).json({ message: 'Vehicle not found' });
+        }
+
         res.status(200).json(updatedVehicle);
     } catch (error) {
         res.status(500).json({ message: 'Error updating vehicle', error });
     }
 };
 
-// Fetch all vehicles
+// Fetch all vehicles (dashboard view)
 const getAllVehicles = async (req, res) => {
     try {
         const vehicles = await Vehicle.find();
