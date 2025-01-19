@@ -3,8 +3,8 @@ const Vehicle = require('../models/vehicleModel');
 // Add a new vehicle
 const addVehicle = async (req, res) => {
     try {
-        const { name, status, location, fuelLevel, batteryLevel } = req.body;
-        const newVehicle = new Vehicle({ name, status, location, fuelLevel, batteryLevel });
+        const { name,  location, fuelLevel, batteryLevel } = req.body;
+        const newVehicle = new Vehicle({ name,location, fuelLevel, batteryLevel });
         await newVehicle.save();
         res.status(201).json(newVehicle);
     } catch (error) {
