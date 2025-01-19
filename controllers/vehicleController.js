@@ -16,7 +16,7 @@ const addVehicle = async (req, res) => {
 const updateVehicle = async (req, res) => {
     try {
         const { id } = req.params;
-        const { status, location, fuelLevel, batteryLevel } = req.body;
+        const { location, fuelLevel, batteryLevel } = req.body;
 
         const updatedVehicle = await Vehicle.findByIdAndUpdate(
             id,
