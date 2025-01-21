@@ -22,7 +22,9 @@ const updateVehicle = async (req, res) => {
         const { id } = req.params;
         const { fuelLevel, batteryLevel } = req.body;
 
-        console.log('Update Data:', req.body); // Log input data
+        if (fuelLevel < 0 || fuelLevel > 100 || batteryLevel < 0 || batteryLevel > 100) {
+            return res.status(400).json({ message: 'Invalid levels. Must be between 0 and 100.' });
+        }
 
         const updatedVehicle = await Vehicle.findByIdAndUpdate(
             id,
@@ -40,6 +42,7 @@ const updateVehicle = async (req, res) => {
         res.status(500).json({ message: 'Error updating vehicle', error });
     }
 };
+
 const getAllVehicles = async (req, res) => {
     try {
         const vehicles = await Vehicle.find();
